@@ -16,7 +16,7 @@ class DuplicatedImageError(Exception):
     pass
 
 
-def hash_bytes(bytes):
+def hash_bytes(content: bytes):
     """
     Generate an MD5 hash for the given bytes.
 
@@ -27,7 +27,7 @@ def hash_bytes(bytes):
         str: The hexadecimal representation of the MD5 hash.
     """
     hash = hashlib.md5()
-    hash.update(bytes)
+    hash.update(content)
     return hash.hexdigest()
 
 
@@ -73,19 +73,19 @@ async def download_image(
             )
 
 
-async def save_image(bytes, filename):
+async def save_image(image: bytes, filename: pathlib.Path):
     """
     Save the given bytes to a file.
 
     Args:
-        bytes: The bytes to be saved.
+        image: Image to be saved.
         filename (pathlib.Path): The path where the file will be saved.
 
     Returns:
         None
     """
     async with aiofiles.open(filename, "wb") as file:
-        await file.write(bytes)
+        await file.write(image)
 
 
 async def download_all_images(data_dir: pathlib.Path, n_images: int):
