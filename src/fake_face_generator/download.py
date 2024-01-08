@@ -2,6 +2,7 @@ import argparse
 import asyncio
 import hashlib
 import pathlib
+import uuid
 
 import aiofiles
 import aiohttp
@@ -39,6 +40,7 @@ async def download_image(
     session: aiohttp.ClientSession,
     seen: set,
     data_dir: pathlib.Path,
+    lock: asyncio.Lock,
 ):
     """
     Download an image and save it if it's unique.
@@ -59,11 +61,12 @@ async def download_image(
         if 200 <= response.status < 300:
             content = await response.read()
             hashed = hash_bytes(content)
-            if hashed in seen:
-                raise DuplicatedImageError
-            filename = data_dir / f"{len(seen) + 1}.jpg"
-            await save_image(content, filename)
-            seen.add(hashed)
+            async with lock:
+                if hashed in seen:
+                    raise DuplicatedImageError
+                filename = data_dir / f"{uuid.uuid4()}.jpg"
+                await save_image(content, filename)
+                seen.add(hashed)
         else:
             raise aiohttp.ClientResponseError(
                 response.request_info,
@@ -100,6 +103,7 @@ async def download_all_images(data_dir: pathlib.Path, n_images: int):
         None
     """
     seen = set()
+    lock = asyncio.Lock()
     semaphore = asyncio.Semaphore(CONCURRENT_LIMIT)
     async with aiohttp.ClientSession(
         timeout=aiohttp.ClientTimeout(total=120)
@@ -107,7 +111,7 @@ async def download_all_images(data_dir: pathlib.Path, n_images: int):
 
         async def download_with_semaphore():
             async with semaphore:
-                await download_image(session, seen, data_dir)
+                await download_image(session, seen, data_dir, lock)
 
         tasks = [download_with_semaphore() for _ in range(n_images)]
         await tqdm_asyncio.gather(*tasks, desc="Downloading fake images")
