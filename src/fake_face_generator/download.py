@@ -1,3 +1,4 @@
+import argparse
 import asyncio
 import hashlib
 import pathlib
@@ -50,18 +51,35 @@ async def save_image(bytes, filename):
         await file.write(bytes)
 
 
-async def download_all():
-    data_dir = pathlib.Path("data")
-    n = 10
+async def download_all_images(data_dir: pathlib.Path, n_images: int):
     seen = set()
     async with aiohttp.ClientSession() as session:
-        tasks = [download_image(session, seen, data_dir) for _ in range(n)]
+        tasks = [download_image(session, seen, data_dir) for _ in range(n_images)]
         await tqdm_asyncio.gather(*tasks, desc="Downloading fake images")
 
 
-async def main():
-    await download_all()
+async def main(args):
+    data_dir = pathlib.Path(args.data_dir)
+    data_dir.mkdir(parents=True, exist_ok=True)
+    n_images = args.n_images
+    await download_all_images(data_dir, n_images)
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    parser = argparse.ArgumentParser(
+        description="Download unique images from thispersondoesnotexist.com"
+    )
+    parser.add_argument(
+        "--data_dir",
+        type=str,
+        help="Path to the directory where you'd like to store the images.",
+        required=True,
+    )
+    parser.add_argument(
+        "--n_images",
+        type=int,
+        help="Number of unique images to be generated.",
+        required=True,
+    )
+    args = parser.parse_args()
+    asyncio.run(main(args))
