@@ -31,7 +31,9 @@ def hash_bytes(bytes):
     return hash.hexdigest()
 
 
-@backoff.on_exception(backoff.expo, aiohttp.ClientError, max_tries=10)
+@backoff.on_exception(
+    backoff.expo, aiohttp.ClientError, max_tries=3, factor=2, jitter=backoff.full_jitter
+)
 @backoff.on_exception(backoff.expo, DuplicatedImageError, max_tries=None)
 async def download_image(
     session: aiohttp.ClientSession,
@@ -100,7 +102,7 @@ async def download_all_images(data_dir: pathlib.Path, n_images: int):
     seen = set()
     semaphore = asyncio.Semaphore(CONCURRENT_LIMIT)
     async with aiohttp.ClientSession(
-        timeout=aiohttp.ClientTimeout(total=60)
+        timeout=aiohttp.ClientTimeout(total=120)
     ) as session:
 
         async def download_with_semaphore():
