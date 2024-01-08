@@ -1,9 +1,11 @@
 import asyncio
 import hashlib
+import pathlib
 
 import aiofiles
 import aiohttp
 import backoff
+from tqdm.asyncio import tqdm_asyncio
 
 URL = "https://thispersondoesnotexist.com"
 
@@ -20,14 +22,18 @@ def hash_bytes(bytes):
 
 @backoff.on_exception(backoff.expo, aiohttp.ClientError, max_tries=3)
 @backoff.on_exception(backoff.expo, DuplicatedImageError, max_tries=None)
-async def download_image(session, seen: set):
+async def download_image(
+    session: aiohttp.ClientSession,
+    seen: set,
+    data_dir: pathlib.Path,
+):
     async with session.get(url=URL) as response:
         if 200 <= response.status < 300:
             content = await response.read()
             hashed = hash_bytes(content)
             if hashed in seen:
                 raise DuplicatedImageError
-            filename = f"data/{len(seen)}.jpg"
+            filename = data_dir / f"{len(seen) + 1}.jpg"
             await save_image(content, filename)
             seen.add(hashed)
         else:
@@ -45,10 +51,12 @@ async def save_image(bytes, filename):
 
 
 async def download_all():
+    data_dir = pathlib.Path("data")
+    n = 10
     seen = set()
     async with aiohttp.ClientSession() as session:
-        tasks = [download_image(session, seen) for _ in range(10)]
-        await asyncio.gather(*tasks)
+        tasks = [download_image(session, seen, data_dir) for _ in range(n)]
+        await tqdm_asyncio.gather(*tasks, desc="Downloading fake images")
 
 
 async def main():
