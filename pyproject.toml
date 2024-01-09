@@ -3,20 +3,14 @@ name = "fake-faces-generator"
 version = "0.1.0"
 description = "A simple CLI for downloading unique images from thispersondoesnotexist.com"
 authors = ["plachert <pmlachert@gmail.com>"]
-license = "MIT"
 readme = "README.md"
+license = "MIT"
+repository = "https://github.com/plachert/fake-faces-generator/"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-aiofiles = "^23.2.1"
-aiohttp = "^3.9.1"
-backoff = "^2.2.1"
-tqdm = "^4.66.1"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-
-[tool.poetry.scripts]
-fake_faces_generator_cli = "fake_faces_generator.download:main"
