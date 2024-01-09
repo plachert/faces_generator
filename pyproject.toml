@@ -12,6 +12,8 @@ python = "^3.9"
 aiofiles = "^23.2.1"
 aiohttp = "^3.9.1"
 backoff = "^2.2.1"
+click = "^8.1.7"
+tqdm = "^4.66.1"
 
 
 [build-system]

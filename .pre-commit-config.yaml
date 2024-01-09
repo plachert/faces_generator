@@ -10,7 +10,7 @@ repos:
   hooks:
   - id: black
     language_version: python3.9
-    args: ["src"]
+    args: ["fake_faces_generator"]
 - repo: https://github.com/jendrikseipp/vulture
   rev: v2.10
   hooks:
