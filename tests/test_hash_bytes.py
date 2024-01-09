@@ -1,6 +1,5 @@
 from fake_faces_generator.download import hash_bytes
 import secrets
-import pytest
 
 
 def test_same_input_produces_same_hash():
