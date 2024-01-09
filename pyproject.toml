@@ -19,3 +19,6 @@ tqdm = "^4.66.1"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+fake_faces_generator = "fake_faces_generator.cli:cli"
