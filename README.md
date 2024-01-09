@@ -6,7 +6,7 @@ There already exist at least two repositories for that:
 1. [ThisPersonDoesNotExistAPI by David-Lor](https://github.com/David-Lor/ThisPersonDoesNotExistAPI/tree/master)
 2. [Forked from ThisPersonDoesNotExistAPI repo by Alonso Silva](https://github.com/alonsosilvaallende/ThisPersonDoesNotExistAPI)
 
-However, they both seem to aim at generating a rather small sample of images for test purposes. Since I wanted to get thousands of fake images for training GANs, I created a CLI that is optimized for that. I optimized the process by using [aiohttp](https://docs.aiohttp.org/en/stable/) and backoff strategies. By tweaking the parameters e.g. concurrency limit or the parameters of backoff policy I was able to download 10k unique images in less than an hour. 
+Both existing repositories appear to focus on generating a relatively small sample of images intended for test purposes. However, aiming to acquire thousands of fake images for GAN training, I developed a CLI optimized for this specific purpose. The optimization involved leveraging [aiohttp](https://docs.aiohttp.org/en/stable/) and implementing backoff strategies. By tweaking the parameters e.g. concurrency limit or the parameters of backoff policy I was able to download 10k unique images in less than an hour. 
 
 ## Installing
 Run the following command in your virtual env.
@@ -20,7 +20,7 @@ Verify installation:
 (venv) foo@bar:~$ python
 >>> import fake_faces_generator
 >>> fake_faces_generator.__version__
-'0.1.0`
+'0.1.0'
 >>>
 ```
 
