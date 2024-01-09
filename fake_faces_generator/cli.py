@@ -1,7 +1,8 @@
 import pathlib
 
 import click
-from download import run
+
+from . import download
 
 
 @click.command()
@@ -30,8 +31,4 @@ def cli(data_dir, n_images):
     $ fake_faces_generator /path/to/images 10
     """
     data_dir = pathlib.Path(data_dir)
-    run(data_dir, n_images)
-
-
-if __name__ == "__main__":
-    cli()
+    download.run(data_dir, n_images)
