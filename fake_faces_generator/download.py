@@ -1,4 +1,3 @@
-import argparse
 import asyncio
 import hashlib
 import pathlib
@@ -117,28 +116,6 @@ async def download_all_images(data_dir: pathlib.Path, n_images: int):
         await tqdm_asyncio.gather(*tasks, desc="Downloading fake images")
 
 
-async def main(args):
-    data_dir = pathlib.Path(args.data_dir)
+def run(data_dir: pathlib.Path, n_images: int):
     data_dir.mkdir(parents=True, exist_ok=True)
-    n_images = args.n_images
-    await download_all_images(data_dir, n_images)
-
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="Download unique images from thispersondoesnotexist.com"
-    )
-    parser.add_argument(
-        "--data_dir",
-        type=str,
-        help="Path to the directory where you'd like to store the images.",
-        required=True,
-    )
-    parser.add_argument(
-        "--n_images",
-        type=int,
-        help="Number of unique images to be generated.",
-        required=True,
-    )
-    args = parser.parse_args()
-    asyncio.run(main(args))
+    asyncio.run(download_all_images(data_dir, n_images))

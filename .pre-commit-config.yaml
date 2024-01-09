@@ -10,12 +10,12 @@ repos:
   hooks:
   - id: black
     language_version: python3.9
-    args: ["src"]
+    args: ["fake_faces_generator", "tests"]
 - repo: https://github.com/jendrikseipp/vulture
   rev: v2.10
   hooks:
   - id: vulture
-    args: ["src", --min-confidence=90, --sort-by-size]
+    args: ["fake_faces_generator", "tests", --min-confidence=90, --sort-by-size]
 
 - repo: https://github.com/PyCQA/autoflake
   rev: v2.2.1
