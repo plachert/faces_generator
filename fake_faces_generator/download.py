@@ -1,6 +1,7 @@
 import asyncio
 import hashlib
 import pathlib
+import pickle
 import uuid
 
 import aiofiles
@@ -10,6 +11,7 @@ from tqdm.asyncio import tqdm_asyncio
 
 URL = "https://thispersondoesnotexist.com"
 CONCURRENT_LIMIT = 50
+SEEN_FILENAME = "seen_images.pkl"
 
 
 class DuplicatedImageError(Exception):
@@ -90,18 +92,18 @@ async def save_image(image: bytes, filename: pathlib.Path):
         await file.write(image)
 
 
-async def download_all_images(data_dir: pathlib.Path, n_images: int):
+async def download_all_images(data_dir: pathlib.Path, n_images: int, seen: set):
     """
     Download a specified number of unique images concurrently.
 
     Args:
         data_dir (pathlib.Path): The directory where images will be saved.
         n_images (int): The number of unique images to be generated.
+        seen (set): Set for tracking unique images
 
     Returns:
         None
     """
-    seen = set()
     lock = asyncio.Lock()
     semaphore = asyncio.Semaphore(CONCURRENT_LIMIT)
     async with aiohttp.ClientSession(
@@ -114,8 +116,17 @@ async def download_all_images(data_dir: pathlib.Path, n_images: int):
 
         tasks = [download_with_semaphore() for _ in range(n_images)]
         await tqdm_asyncio.gather(*tasks, desc="Downloading fake images")
+    seen_file = data_dir / SEEN_FILENAME
+    with open(seen_file, "wb") as f:
+        pickle.dump(seen, f)
 
 
 def run(data_dir: pathlib.Path, n_images: int):
+    seen_file = data_dir / SEEN_FILENAME
+    if seen_file.exists():
+        with open(seen_file, "rb") as f:
+            seen = pickle.load(f)
+    else:
+        seen = set()
     data_dir.mkdir(parents=True, exist_ok=True)
-    asyncio.run(download_all_images(data_dir, n_images))
+    asyncio.run(download_all_images(data_dir, n_images, seen))
