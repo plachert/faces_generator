@@ -1,5 +1,6 @@
-from fake_faces_generator.download import hash_bytes
 import secrets
+
+from fake_faces_generator.download import hash_bytes
 
 
 def test_same_input_produces_same_hash():
@@ -18,12 +19,12 @@ def test_different_input_produces_different_hash():
 
 
 def test_is_hexdecimal():
-    def is_hexdecimal(s):
+    def is_hexdecimal(input_bytes):
         try:
             int(hash_bytes(input_bytes), 16)
             return True
         except ValueError:
             return False
+
     input_bytes = secrets.token_bytes(100)
     assert is_hexdecimal(hash_bytes(input_bytes)) == True
-    

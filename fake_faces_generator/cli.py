@@ -20,12 +20,12 @@ def cli(data_dir, n_images):
     """
     CLI tool to download unique images of human faces from thispersondoesnotexist.com.
 
-    Args:
+    Args:\n
         DATA_DIR (str): Path to the directory where you'd like to store the images.
 
         N_IMAGES (int): Number of unique images to be generated (must be greater than 0).
 
-    Examples:
+    Examples:\n
     - To download 10 images to the 'images' directory:
 
     $ fake_faces_generator /path/to/images 10
