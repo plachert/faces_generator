@@ -15,7 +15,7 @@ Both existing repositories appear to focus on generating a relatively small samp
 Run the following command in your virtual env.
 
 ```shell
-(venv) foo@bar:~$ pip install git+https://github.com/plachert/fake-faces-generator
+pip install git+https://github.com/plachert/fake-faces-generator
 ```
 
 Verify installation:
