@@ -30,7 +30,7 @@ Verify installation:
 ## How to use
 Run the following command to generate 100 images in `./generated_faces` (the directory will be created, you can provide any existing or non existing directory):
 ```shell
-(venv) foo@bar:~$ fake_faces_generator ./generated_faces 100
+fake_faces_generator ./generated_faces 100
 ```
 
 
