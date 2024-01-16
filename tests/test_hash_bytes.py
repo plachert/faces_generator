@@ -19,9 +19,9 @@ def test_different_input_produces_different_hash():
 
 
 def test_is_hexdecimal():
-    def is_hexdecimal(input_bytes):
+    def is_hexdecimal(string):
         try:
-            int(hash_bytes(input_bytes), 16)
+            int(string, 16)
             return True
         except ValueError:
             return False
