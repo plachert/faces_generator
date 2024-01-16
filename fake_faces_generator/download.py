@@ -116,9 +116,6 @@ async def download_all_images(data_dir: pathlib.Path, n_images: int, seen: set):
 
         tasks = [download_with_semaphore() for _ in range(n_images)]
         await tqdm_asyncio.gather(*tasks, desc="Downloading fake images")
-    seen_file = data_dir / SEEN_FILENAME
-    with open(seen_file, "wb") as f:
-        pickle.dump(seen, f)
 
 
 def run(data_dir: pathlib.Path, n_images: int):
@@ -129,4 +126,10 @@ def run(data_dir: pathlib.Path, n_images: int):
     else:
         seen = set()
     data_dir.mkdir(parents=True, exist_ok=True)
-    asyncio.run(download_all_images(data_dir, n_images, seen))
+    try:
+        asyncio.run(download_all_images(data_dir, n_images, seen))
+    finally:
+        if seen:
+            seen_file = data_dir / SEEN_FILENAME
+            with open(seen_file, "wb") as f:
+                pickle.dump(seen, f)
