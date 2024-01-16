@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fake-faces-generator"
-version = "0.1.0"
+version = "0.1.1"
 description = "A simple CLI for downloading unique images from thispersondoesnotexist.com"
 authors = ["plachert <pmlachert@gmail.com>"]
 readme = "README.md"
