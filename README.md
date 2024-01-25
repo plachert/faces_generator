@@ -6,7 +6,8 @@ There already exist at least two repositories for that:
 1. [ThisPersonDoesNotExistAPI by David-Lor](https://github.com/David-Lor/ThisPersonDoesNotExistAPI/tree/master)
 2. [Forked from ThisPersonDoesNotExistAPI repo by Alonso Silva](https://github.com/alonsosilvaallende/ThisPersonDoesNotExistAPI)
 
-Both existing repositories appear to focus on generating a relatively small sample of images intended for test purposes. However, aiming to acquire thousands of fake images for GAN training, I developed a CLI optimized for this specific purpose. The optimization involved leveraging [aiohttp](https://docs.aiohttp.org/en/stable/) and implementing backoff strategies. By tweaking the parameters e.g. concurrency limit or the parameters of backoff policy I was able to download 10k unique images in less than an hour. 
+Both existing repositories appear to focus on generating a relatively small sample of images intended for test purposes. However, aiming to acquire thousands of fake images for GAN training, I developed a CLI optimized for this specific purpose. Of course you may as well use [FFHQ dataset](https://github.com/NVlabs/ffhq-dataset/tree/master) for that, but it seemed like a fun project so why not give it a go?
+The optimization involved leveraging [aiohttp](https://docs.aiohttp.org/en/stable/) and implementing backoff strategies. By tweaking the parameters e.g. concurrency limit or the parameters of backoff policy I was able to download 10k unique images in less than an hour. 
 
 ## Version 0.1.1
 - Tracking file (seen.pkl) is always saved (even when an error occurs). 
